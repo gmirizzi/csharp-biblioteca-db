@@ -56,6 +56,34 @@ using (SqlConnection connessioneSql = new SqlConnection(stringaDiConnessione))
         Console.WriteLine(ex.ToString());
     }
 }
+Console.WriteLine();
+Console.Write("Vuoi effettuare un prestito? (sì/no) ");
+string scelta = Console.ReadLine();
+if (scelta == "sì")
+    Console.Write("Inserisci il titolo del libro ");
+string titolo = Console.ReadLine();
+int idBook;
+using (SqlConnection connessioneSql = new SqlConnection(stringaDiConnessione))
+{
+    try
+    {
+        connessioneSql.Open();
+        string query = $"SELECT copies.id, conditions.name FROM copies LEFT JOIN books ON books.id = copies.book_id LEFT JOIN conditions ON conditions.id = copies.condition_id WHERE books.title = '{titolo}'";
+        using (SqlCommand cmd = new SqlCommand(query, connessioneSql))
+        using (SqlDataReader reader = cmd.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                Console.Write(reader.GetInt32(0) + ". ");
+                Console.Write(reader.GetString(1) + "\n");
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.ToString());
+    }
+}
 
 Biblioteca newBiblio = new Biblioteca();
 //Creare 3 nuovi utenti
@@ -79,41 +107,42 @@ newBiblio.AddDoc(libro2);
 Libro libro3 = new Libro("Titolo bellissimo");
 newBiblio.AddDoc(libro3);
 
-Console.WriteLine("Biblioteca online");
-Console.WriteLine("1. Registrati");
-Console.WriteLine("2. Login");
-string scelta = Console.ReadLine();
-if (scelta == "1")
-{
-    Console.Write("Inserisci mail ");
-    string mail = Console.ReadLine();
-    Console.Write("Inserisci password ");
-    string pw = Console.ReadLine();
-    Utente newUser = new Utente(mail, pw);
-    newBiblio.AddUser(newUser);
-    Console.WriteLine("Nuovo utente registrato");
-} else
-{
-    Console.Write("Inserisci mail ");
-    string mail = Console.ReadLine();
-    Console.Write("Inserisci password ");
-    string pw = Console.ReadLine();
-    if (newBiblio.isRegistred(mail,pw))
-    {
-        Console.WriteLine("Sei loggato");
-        Console.WriteLine("1. Cerca Libri");
-        Console.WriteLine("2. Cerca DVD");
-        string scelta2 = Console.ReadLine();
-        if (scelta2 == "1")
-        {
-            Console.WriteLine("Inserisci titolo ");
-            string titolo = Console.ReadLine();
-        }
-    }
-    else
-    {
-        Console.WriteLine("Non sei registrato");
-    }
-}
+//Console.WriteLine("Biblioteca online");
+//Console.WriteLine("1. Registrati");
+//Console.WriteLine("2. Login");
+//string scelta = Console.ReadLine();
+//if (scelta == "1")
+//{
+//    Console.Write("Inserisci mail ");
+//    string mail = Console.ReadLine();
+//    Console.Write("Inserisci password ");
+//    string pw = Console.ReadLine();
+//    Utente newUser = new Utente(mail, pw);
+//    newBiblio.AddUser(newUser);
+//    Console.WriteLine("Nuovo utente registrato");
+//}
+//else
+//{
+//    Console.Write("Inserisci mail ");
+//    string mail = Console.ReadLine();
+//    Console.Write("Inserisci password ");
+//    string pw = Console.ReadLine();
+//    if (newBiblio.isRegistred(mail, pw))
+//    {
+//        Console.WriteLine("Sei loggato");
+//        Console.WriteLine("1. Cerca Libri");
+//        Console.WriteLine("2. Cerca DVD");
+//        string scelta2 = Console.ReadLine();
+//        if (scelta2 == "1")
+//        {
+//            Console.WriteLine("Inserisci titolo ");
+//            string titolo = Console.ReadLine();
+//        }
+//    }
+//    else
+//    {
+//        Console.WriteLine("Non sei registrato");
+//    }
+//}
 
 
