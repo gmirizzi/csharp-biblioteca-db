@@ -29,6 +29,33 @@
 
 // tutti i menu hanno esci o torna indietro
 using csharp_biblioteca;
+using System.Data.SqlClient;
+
+string stringaDiConnessione = "Data Source=localhost;Initial Catalog=db-biblioteca;Integrated Security=True";
+
+//Reader per la tabella dei libri
+using (SqlConnection connessioneSql = new SqlConnection(stringaDiConnessione))
+{
+    try
+    {
+        connessioneSql.Open();
+        string query = "SELECT title, author, year FROM books";
+        Console.WriteLine("Titolo\tAutore\tAnno");
+        using (SqlCommand cmd = new SqlCommand(query, connessioneSql))
+        using (SqlDataReader reader = cmd.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                Console.WriteLine($"{reader.GetString(0)}\t{reader.GetString(1)}\t{reader.GetInt16(2)}");
+            }
+        }
+
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.ToString());
+    }
+}
 
 Biblioteca newBiblio = new Biblioteca();
 //Creare 3 nuovi utenti
